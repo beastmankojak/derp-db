@@ -1,0 +1,17 @@
+{
+  "name": "derp-db",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "getAllDerpData": "node src/getAllDerpData.js",
+    "getAllEggData": "node src/getAllEggData.js",
+    "mongodb": "docker run --rm -v $PWD/data:/data/db -p 27017:27017 -d mongo:4.2"
+  },
+  "keywords": [],
+  "author": "beastman.kojak",
+  "license": "MIT",
+  "dependencies": {
+    "got": "^11.8.2",
+    "mongodb": "^4.1.3"
+  }
+}
