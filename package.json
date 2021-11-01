@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "generateEggCsv": "node src/eggsToCsv.js > eggs.csv",
     "getAllDerpData": "node src/getAllDerpData.js",
     "getAllEggData": "node src/getAllEggData.js",
     "mongodb": "docker run --rm -v $PWD/data:/data/db -p 27017:27017 -d mongo:4.2"
