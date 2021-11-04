@@ -4,6 +4,8 @@ const { derpEggsPolicyId: policyId } = require('./constants');
 const client = require('./blockfrost/client');
 const assetGenerator = require('./blockfrost/assetGenerator');
 const wait = require('./util/wait');
+const runScripts = require('./db_updates/runScripts');
+const transformEggMeta = require('./transformEggMeta');
 
 const PROJECT_ID = process.env.PROJECT_ID;
 if (!PROJECT_ID) {
@@ -17,7 +19,10 @@ const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://localhost:27017';
   try {
     await mongoClient.connect();
     console.log('Connected to database');
+    await runScripts(mongoClient);
+
     const eggCollection = mongoClient.db('derp').collection('eggs');
+    const metaCollection = mongoClient.db('derp').collection('eggMeta');
     const offset = await eggCollection.countDocuments({});
 
     console.log('Fetching data from blockfrost...');
@@ -26,6 +31,7 @@ const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://localhost:27017';
     for await (const asset of assetGenerator({ blockfrost, policyId, offset })) {
       //console.log(asset);
       await eggCollection.insertOne(asset);
+      await metaCollection.insertOne(transformEggMeta(asset));
       count++;
       if (count % 100 === 0) {
         console.log(count);

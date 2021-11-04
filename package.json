@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "dbUpdate": "node bin/runDbScripts.js",
     "dockerPush": "docker push beastmankojak/derp-db:latest",
     "generateEggCsv": "node src/eggsToCsv.js > eggs.csv",
     "getAllDerpData": "node src/getAllDerpData.js",
