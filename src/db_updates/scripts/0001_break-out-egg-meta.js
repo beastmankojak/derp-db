@@ -7,7 +7,7 @@ const migrate = async (mongoClient) => {
   for await (const _egg of allEggs) {
     const egg = transformEggMeta(_egg);
     const { eggId } = egg;
-    metaCollection.updateOne({ eggId }, { $set: { ...egg } }, { upsert: true });
+    await metaCollection.updateOne({ eggId }, { $set: { ...egg } }, { upsert: true });
   }
 };
 

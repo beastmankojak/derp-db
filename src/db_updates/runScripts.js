@@ -5,7 +5,7 @@ const runScripts = async (mongoClient) => {
   const lastMigration = await migrationsCollection.findOne({}, { sort: [[ 'key', 'desc' ]] });
   const { key: lastRunKey } = lastMigration || {};
   const migrationKeys = Object.keys(migrations)
-    .filter(({ key }) => lastRunKey == null || key > lastRunKey)
+    .filter((key) => lastRunKey == null || key > lastRunKey)
     .sort((a, b) => a > b ? 1 : a < b ? -1 : 0);
 
   if (migrationKeys.length) {

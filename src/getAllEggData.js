@@ -6,6 +6,7 @@ const assetGenerator = require('./blockfrost/assetGenerator');
 const wait = require('./util/wait');
 const runScripts = require('./db_updates/runScripts');
 const transformEggMeta = require('./transformEggMeta');
+const updateEggMaterializedView = require('./queries/updateEggMaterializedView');
 
 const PROJECT_ID = process.env.PROJECT_ID;
 if (!PROJECT_ID) {
@@ -38,6 +39,12 @@ const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://localhost:27017';
       }
       await wait(100);
     }
+
+    // update materialized view
+    const view = mongoClient.db('derp').collection('eggsWithParent');
+    const { eggId } = await view.findOne({}, { sort: { eggId: -1 } });
+    await updateEggMaterializedView(metaCollection, { eggId: { $gt: eggId } });
+
     console.log(`Total egg count: ${count + offset}`);
   } catch (err) {
     console.log('Error', err);

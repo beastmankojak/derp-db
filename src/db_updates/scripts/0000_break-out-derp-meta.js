@@ -7,7 +7,7 @@ const migrate = async (mongoClient) => {
   for await (const _derp of allDerps) {
     const derp = transformDerpMeta(_derp);
     const { derpId } = derp;
-    metaCollection.updateOne({ derpId }, { $set: { ...derp } }, { upsert: true });
+    await metaCollection.updateOne({ derpId }, { $set: { ...derp } }, { upsert: true });
   }
 };
 
