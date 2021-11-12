@@ -8,7 +8,7 @@
     "generateEggCsv": "node src/eggsToCsv.js > eggs.csv",
     "getAllDerpData": "node src/getAllDerpData.js",
     "getAllEggData": "node src/getAllEggData.js",
-    "mongodb": "mkdir -p data/db && docker run --rm -v $PWD/data/db:/data/db -p 27017:27017 --name derp-db -d beastmankojak/derp-db:latest",
+    "mongodb": "bin/dockerRun.sh",
     "refreshDockerImage": "tar -zcvf data.tar.gz data && docker build -f docker/Dockerfile -t beastmankojak/derp-db ."
   },
   "keywords": [],

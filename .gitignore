@@ -1,4 +1,6 @@
 data
 data.tar.gz
-node_modules
+/node_modules/
 eggs.csv
+
+.DS_Store
