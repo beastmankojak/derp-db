@@ -4,6 +4,8 @@
   "description": "",
   "scripts": {
     "dbUpdate": "node bin/runDbScripts.js",
+    "dockerBuildEggUpdate": "docker build -f docker/Dockerfile.update-egg-data -t beastmankojak/derp-db-update-egg-data .",
+    "dockerPushEggUpdate": "docker push beastmankojak/derp-db-update-egg-data:latest",
     "dockerPush": "docker push beastmankojak/derp-db:latest",
     "generateEggCsv": "node src/eggsToCsv.js > eggs.csv",
     "getAllDerpData": "node src/getAllDerpData.js",
