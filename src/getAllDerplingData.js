@@ -8,8 +8,7 @@ const runScripts = require('./db_updates/runScripts');
 const transformDerplingMeta = require('./transformDerplingMeta');
 const updateDerplingAttributesMaterializedView = require('./queries/updateDerplingAttributesMaterializedView');
 const updateDerplingStatsMaterializedView = require('./queries/updateDerplingStatsMaterializedView');
-// const transformEggMeta = require('./transformEggMeta');
-// const updateEggMaterializedView = require('./queries/updateEggMaterializedView');
+const updateTwins = require('./queries/updateTwins');
 
 const PROJECT_ID = process.env.PROJECT_ID;
 if (!PROJECT_ID) {
@@ -43,12 +42,11 @@ const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://localhost:27017';
       await wait(100);
     }
 
-    // update materialized view
+    console.log('updating views...');
+    // update materialized views
+    await updateTwins(metaCollection);
     await updateDerplingAttributesMaterializedView(metaCollection);
     await updateDerplingStatsMaterializedView(metaCollection);
-    // const view = mongoClient.db('derp').collection('eggsWithParent');
-    // const { eggId } = await view.findOne({}, { sort: { eggId: -1 } });
-    // await updateEggMaterializedView(metaCollection, { eggId: { $gt: eggId } });
 
     console.log(`Total derpling count: ${count + offset}`);
   } catch (err) {
