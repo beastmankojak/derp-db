@@ -1,6 +1,8 @@
 const constants = {
   derpBirdsPolicyId: 'b92f6473f18d4b78733d022fd89f3cacc1484fab6eddfd3c5d4b9494',
   derpEggsPolicyId: '2b62bb0d57c3577d624cb976f58352c38d967a30436a6acad44f23f2',
+  derplingsPolicyId: 'b2d25f829ebb7f4c97b5e847923a1115b23ebf78000722c229c9c9f7',
+  derpEggShardsPolicyId: 'fb84f112254a91b284af3aacaa29c4874f21bc1c67749a9664183eb3',
   perfectEggs: {
     'ipfs://QmPiLh8FY76B2rU6bP7HfQMaQWmVWmve5RT9HEnuJcwQan': 'redneck',
     'ipfs://QmVhvHRMgg2mqkrytkBaErzNQh27uYsQxqHhKGgA8nAmL5': 'dave',
