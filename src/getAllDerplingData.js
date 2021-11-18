@@ -7,6 +7,7 @@ const wait = require('./util/wait');
 const runScripts = require('./db_updates/runScripts');
 const transformDerplingMeta = require('./transformDerplingMeta');
 const updateDerplingAttributesMaterializedView = require('./queries/updateDerplingAttributesMaterializedView');
+const updateDerplingStatsMaterializedView = require('./queries/updateDerplingStatsMaterializedView');
 // const transformEggMeta = require('./transformEggMeta');
 // const updateEggMaterializedView = require('./queries/updateEggMaterializedView');
 
@@ -44,6 +45,7 @@ const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://localhost:27017';
 
     // update materialized view
     await updateDerplingAttributesMaterializedView(metaCollection);
+    await updateDerplingStatsMaterializedView(metaCollection);
     // const view = mongoClient.db('derp').collection('eggsWithParent');
     // const { eggId } = await view.findOne({}, { sort: { eggId: -1 } });
     // await updateEggMaterializedView(metaCollection, { eggId: { $gt: eggId } });
