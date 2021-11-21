@@ -6,7 +6,8 @@ const assetGenerator = require('./blockfrost/assetGenerator');
 const wait = require('./util/wait');
 const runScripts = require('./db_updates/runScripts');
 const transformDerplingMeta = require('./transformDerplingMeta');
-const updateDerplingAttributesMaterializedView = require('./queries/updateDerplingAttributesMaterializedView');
+const updateDerplingTraitsMaterializedView = require('./queries/updateDerplingTraitsMaterializedView');
+const updateDerplingRarities = require('./queries/updateDerplingRarities');
 const updateDerplingStatsMaterializedView = require('./queries/updateDerplingStatsMaterializedView');
 const updateTwins = require('./queries/updateTwins');
 
@@ -24,8 +25,9 @@ const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://localhost:27017';
     console.log('Connected to database');
     await runScripts(mongoClient);
 
-    const derplingCollection = mongoClient.db('derp').collection('derplings');
-    const metaCollection = mongoClient.db('derp').collection('derplingMeta');
+    const db = mongoClient.db('derp');
+    const derplingCollection = db.collection('derplings');
+    const metaCollection = db.collection('derplingMeta');
     const offset = await derplingCollection.countDocuments({});
 
     console.log('Fetching data from blockfrost...');
@@ -45,7 +47,8 @@ const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://localhost:27017';
     console.log('updating views...');
     // update materialized views
     await updateTwins(metaCollection);
-    await updateDerplingAttributesMaterializedView(metaCollection);
+    await updateDerplingTraitsMaterializedView(metaCollection);
+    await updateDerplingRarities(derplingCollection);
     await updateDerplingStatsMaterializedView(metaCollection);
 
     console.log(`Total derpling count: ${count + offset}`);
