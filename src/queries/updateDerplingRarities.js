@@ -62,11 +62,8 @@ const updateDerplingRarities = async (collection) => {
       dadbodBoost: {
         $cond: {
           if: { $eq: [ '$onchain_metadata.attributes.dadbodTag', 'None'] },
-          // Note: these are reversed so that if the dadbodTag is none, we get the "Yes" bucket
-          // which has a higher count and therefore a lower rarity score.  This will effectively
-          // boost the dadbod tags without boosting when the tag is not there.
-          then: 'Yes',
-          else: 'No'
+          then: 'No',
+          else: 'Yes'
         }
       },
       pedestal: '$onchain_metadata.attributes.pedestal',
