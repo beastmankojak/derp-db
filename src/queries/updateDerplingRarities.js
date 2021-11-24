@@ -22,7 +22,7 @@ const derplingTraits = (trait) => ({
 
 const traitsToInclude = [
   'aura', 'beak', 'body', 'eyes', 'head', 'cargo', 
-  'color', 'pedestal', 'eggshellBucket', //'pedestal', //'dadbodTag',
+  'color', 'pedestal', 'eggshellBucket', 'dadbodBoost'
 ];
 
 const updateDerplingRarities = async (collection) => {
@@ -57,6 +57,16 @@ const updateDerplingRarities = async (collection) => {
               else: 'Perfect'
             }
           }
+        }
+      },
+      dadbodBoost: {
+        $cond: {
+          if: { $eq: [ '$onchain_metadata.attributes.dadbodTag', 'None'] },
+          // Note: these are reversed so that if the dadbodTag is none, we get the "Yes" bucket
+          // which has a higher count and therefore a lower rarity score.  This will effectively
+          // boost the dadbod tags without boosting when the tag is not there.
+          then: 'Yes',
+          else: 'No'
         }
       },
       pedestal: '$onchain_metadata.attributes.pedestal',
