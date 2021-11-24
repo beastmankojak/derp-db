@@ -22,7 +22,7 @@ const derplingTraits = (trait) => ({
 
 const traitsToInclude = [
   'aura', 'beak', 'body', 'eyes', 'head', 'cargo', 
-  'color', 'pedestal', //'eggshell', //'pedestal', //'dadbodTag',
+  'color', 'pedestal', 'eggshellBucket', //'pedestal', //'dadbodTag',
 ];
 
 const updateDerplingRarities = async (collection) => {
@@ -46,6 +46,19 @@ const updateDerplingRarities = async (collection) => {
       father: '$onchain_metadata.attributes.father',
       gender: '$onchain_metadata.attributes.gender',
       eggshell: '$onchain_metadata.attributes.eggshell',
+      eggshellBucket: { 
+        $cond: { 
+          if: { $eq: [ '$onchain_metadata.attributes.eggshell', 'PRED']}, 
+          then: 'PRED', 
+          else: { 
+            $cond: { 
+              if: { $regexMatch: { input: '$onchain_metadata.attributes.eggshell', regex: /Derp/ } }, 
+              then: 'Derp', 
+              else: 'Perfect'
+            }
+          }
+        }
+      },
       pedestal: '$onchain_metadata.attributes.pedestal',
       basecolor: '$onchain_metadata.attributes.basecolor',
       dadbodTag: '$onchain_metadata.attributes.dadbodTag',
@@ -55,7 +68,7 @@ const updateDerplingRarities = async (collection) => {
       _id: 1, derplingId: 1, 
       rarityScore: { 
         $sum: traitsToInclude.map((trait) => ({
-          $arrayElemAt: [`$${trait}Stats._id.rarityScore`, 0] 
+          $arrayElemAt: [`$${trait}Stats._id.scaledRarityScore`, 0] 
         }))
       },
     }},
