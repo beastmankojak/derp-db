@@ -22,7 +22,7 @@ const derplingTraits = (trait) => ({
 
 const traitsToInclude = [
   'aura', 'beak', 'body', 'eyes', 'head', 'cargo', 
-  'color', 'pedestal', 'eggshellBucket', 'dadbodBoost'
+  'color', 'pedestal', 'eggshellBucket', //'dadbodBoost'
 ];
 
 const updateDerplingRarities = async (collection) => {
