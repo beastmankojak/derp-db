@@ -33,7 +33,10 @@ async function* assetGenerator({
     .slice(initialOffset);
 
   while(assetPage.length) {
-    for (const { asset: assetId } of assetPage) {
+    for (const { asset: assetId, quantity } of assetPage) {
+      if (quantity !== "1") {
+        continue;
+      }
       const asset = await getAsset({ blockfrost, assetId });
       yield asset;
       

@@ -19,7 +19,8 @@ const constants = {
     'ipfs://QmV5Mk3iufuiEqDS2FqrLYF8s16f435e92Yw4V1W1nQ3QN': 'scientist',
     'ipfs://QmW5ymQneJYEWFMv7i5zgsqAdtRu4AGf6q566vYVSrS3VZ': 'cyborg',
     'ipfs://QmQhVRYCUrwaB4sEfefkNYikWyXcMxAHYtzXXTEGfpNasb': 'buff'
-  }
+  },
+  rockerPolicyId: '3c1169f0336f60c46aa0651bd8130c8f35a001005cf7599bb25d7cf8',
 }
 
 module.exports = constants;
