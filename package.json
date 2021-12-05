@@ -12,6 +12,7 @@
     "getAllDerplingData": "node src/getAllDerplingData.js",
     "getAllEggData": "node src/getAllEggData.js",
     "getAllRockerData": "node src/getAllBabyRockerData.js",
+    "getAllSpaceshipData": "node src/getAllBacSpaceshipData.js",
     "mongodb": "bin/dockerRun.sh",
     "refreshDockerImage": "tar -zcvf data.tar.gz data && docker build -f docker/Dockerfile -t beastmankojak/derp-db ."
   },

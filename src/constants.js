@@ -21,6 +21,7 @@ const constants = {
     'ipfs://QmQhVRYCUrwaB4sEfefkNYikWyXcMxAHYtzXXTEGfpNasb': 'buff'
   },
   rockerPolicyId: '3c1169f0336f60c46aa0651bd8130c8f35a001005cf7599bb25d7cf8',
+  bacSpaceshipPolicyId: '3fdc0ae45c37eb0917acd296fa296d7cf264faa4c90b058e90ddc0d8',
 }
 
 module.exports = constants;
