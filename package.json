@@ -14,13 +14,16 @@
     "getAllRockerData": "node src/getAllBabyRockerData.js",
     "getAllSpaceshipData": "node src/getAllBacSpaceshipData.js",
     "mongodb": "bin/dockerRun.sh",
-    "refreshDockerImage": "tar -zcvf data.tar.gz data && docker build -f docker/Dockerfile -t beastmankojak/derp-db ."
+    "refreshDockerImage": "tar -zcvf data.tar.gz data && docker build -f docker/Dockerfile -t beastmankojak/derp-db .",
+
+    "importCollection": "node src/importCollection.js"
   },
   "keywords": [],
   "author": "beastman.kojak",
   "license": "MIT",
   "dependencies": {
     "got": "^11.8.2",
+    "lodash": "^4.17.21",
     "mongodb": "^4.1.3"
   }
 }

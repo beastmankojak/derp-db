@@ -22,6 +22,7 @@ const constants = {
   },
   rockerPolicyId: '3c1169f0336f60c46aa0651bd8130c8f35a001005cf7599bb25d7cf8',
   bacSpaceshipPolicyId: '3fdc0ae45c37eb0917acd296fa296d7cf264faa4c90b058e90ddc0d8',
+  bacChristmasPolicyId: '2f641f799b2a8fde7a4d3659765f5bbee2f853db32b86668917e3c77',
 }
 
 module.exports = constants;
