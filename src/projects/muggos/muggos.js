@@ -10,6 +10,7 @@ const {
   defaultStatsTransform,
 } = require('../../transforms');
 const muggosTransform = require('./custom/muggosTransform');
+const colorMatchedTransform = require('./custom/colorMatchedTransform');
 
 const traits = [
   "Muggo Age",
@@ -50,6 +51,7 @@ const transformedTraits = [
   "Muggo Accessory",
   "Muggo Background",
   "Muggo Foreground",
+  "Color Matched",
   "Muggo Gameplay Proficiency",
   "Sidekick",
   "Sidekick Gem",
@@ -82,6 +84,7 @@ const finalMeta = {
   ...meta,
   metaTransform: muggosTransform(defaultMetaTransform(traits)),
   viewTransforms: [
+    colorMatchedTransform({ ...meta }),
     defaultTraitTransform({ ...meta, traits: transformedTraits }),
     defaultRarityTransform({ ...meta, traits: transformedTraits }),
     defaultStatsTransform(meta),
