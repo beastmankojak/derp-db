@@ -6,7 +6,8 @@ const transform = ({
     traitCollectionName: traitCollection,
     metaCollectionName: metaCollection, 
     collectionName
-  }
+  },
+  originTraitMapper
 }) => {
   const buildTraits = (trait) => ({
     from: traitCollection,
@@ -30,12 +31,13 @@ const transform = ({
     as: `${trait}Stats`
   });
 
-  const allTraits = [ 'name', 'image', ...traitsToInclude ];
+  const targetTraits = [ 'name', 'image', ...traitsToInclude ];
+  const originTraits = [ 'name', 'image', ...(originTraitMapper ? originTraitMapper(traitsToInclude) : traitsToInclude) ];
   
   return async (db) => {
     const pipeline = [
       { $project: 
-        _.zipObject(allTraits, allTraits.map((trait) => `$onchain_metadata.${trait}`)),
+        _.zipObject(targetTraits, originTraits.map((trait) => `$onchain_metadata.${trait}`)),
       },
       ...traitsToInclude.map((trait) => ({ $lookup: buildTraits(trait) })),
       { $project: {
