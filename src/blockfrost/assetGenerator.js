@@ -6,7 +6,10 @@ async function* assetGenerator({
   policyId,
   pageSize = 100,
   offset = 0,
-  limit = Infinity
+  limit = Infinity,
+  generatorOptions: { 
+    quantityOk = (quantity) => quantity === "1"
+  } = {}
 }) {
   if (!blockfrost) {
     throw new Error('blockfrost is a required property of allAssetsOfPolicyId');
@@ -34,7 +37,7 @@ async function* assetGenerator({
 
   while(assetPage.length) {
     for (const { asset: assetId, quantity } of assetPage) {
-      if (quantity !== "1") {
+      if (!quantityOk(quantity)) {
         continue;
       }
       const asset = await getAsset({ blockfrost, assetId });

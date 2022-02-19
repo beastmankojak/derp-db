@@ -31,6 +31,9 @@ const meta = {
     statsCollectionName
   },
   traits,
+  generatorOptions: {
+    quantityOk: (quantity) => quantity >= 1
+  }
 };
 
 
