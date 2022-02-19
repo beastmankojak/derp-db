@@ -25,8 +25,6 @@ const buildLoader = ({
       throw new Error('Must specify a metadata transform');
     }
 
-    console.log({generatorOptions});
-
     const mongoClient = new MongoClient(MONGODB_URL);
     try {
       await mongoClient.connect();
