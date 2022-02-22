@@ -1,16 +1,12 @@
 const fs = require('fs');
 const path = require('path');
+const yargs = require('yargs');
 
 const buildLoader = require('./buildLoader');
 
-const [,,collection, reload] = process.argv;
+const [,,collection] = process.argv;
 if (!collection) {
   console.log('ERROR: you must specify a collection to import');
-  process.exit(1);
-}
-
-if (reload && reload !== 'reload') {
-  console.log('ERROR: the second parameter must be "reload" if present');
   process.exit(1);
 }
 
@@ -20,15 +16,20 @@ if (!fs.existsSync(collectionAbsPath)) {
   process.exit(1);
 }
 
+const { reload, limit } = yargs(process.argv.slice(3)).argv;
+
 const requirePath = `./projects/${collection}`;
 const meta = require(requirePath);
 
 const PROJECT_ID = process.env.PROJECT_ID;
 const MONGODB_URL = process.env.MONGODB_URL;
 
-console.log(reload);
+const importFn = buildLoader({
+  PROJECT_ID, MONGODB_URL, 
+  ...(reload ? { reload } : {}),
+  ...(limit ? { limit } : {})
+});
 
-const importFn = buildLoader({ PROJECT_ID, MONGODB_URL, ...(reload === 'reload' ? { reload } : {}) });
 (async () => {
   importFn(meta);
 })();

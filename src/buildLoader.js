@@ -9,7 +9,8 @@ const buildLoader = ({
   PROJECT_ID,
   MONGODB_URL = 'mongodb://localhost:27017',
   notify = console.log,
-  reload
+  reload,
+  limit
 } = {}) => {
   if (!PROJECT_ID) {
     throw new Error('Hey, you need to set the PROJECT_ID env var before running this script!');
@@ -41,7 +42,7 @@ const buildLoader = ({
       console.log('Fetching data from blockfrost...');
       const blockfrost = client({ projectId: PROJECT_ID });
       let count = 0;
-      for await (const asset of assetGenerator({ blockfrost, policyId, offset, ...{ generatorOptions } })) {
+      for await (const asset of assetGenerator({ blockfrost, policyId, offset, ...{ generatorOptions }, ...(limit ? { limit } : {}) })) {
         await collection.updateOne(
           { 'onchain_metadata.name': asset.onchain_metadata.name },
           { $set: asset }, 
