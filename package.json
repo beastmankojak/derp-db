@@ -15,7 +15,9 @@
     "getAllSpaceshipData": "node src/getAllBacSpaceshipData.js",
     "mongodb": "bin/dockerRun.sh",
     "refreshDockerImage": "tar -zcvf data.tar.gz data && docker build -f docker/Dockerfile -t beastmankojak/derp-db .",
-    "importCollection": "node src/importCollection.js"
+    "importCollection": "node src/importCollection.js",
+    "initializePriceData": "node src/initializePriceData.js",
+    "updateJpegStoreListings": "node src/updateJpegStoreListings.js"
   },
   "keywords": [],
   "author": "beastman.kojak",
