@@ -1,5 +1,6 @@
 const { MongoClient } = require('mongodb');
 const got = require('got');
+const ensureUniqueNameIndex = require('./queries/ensureUniqueNameIndex');
 
 const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://localhost:27017';
 
@@ -21,7 +22,7 @@ if (!listingsUrl) {
 }
 
 const requirePath = `./projects/${collection}`;
-const { db: { name: dbName } } = require(requirePath);
+const { db: { name: dbName, metaCollectionName } } = require(requirePath);
 
 const range = (start, length) => Array.apply(null, Array(length)).map((item, i) => i + start);
 const id = (i) => '00000'.slice(0, -`${i}`.length) + `${i}`;
@@ -32,12 +33,13 @@ const id = (i) => '00000'.slice(0, -`${i}`.length) + `${i}`;
     await mongoClient.connect();
 
     const db = mongoClient.db(dbName);
+    const metaCollection = db.collection(metaCollectionName);
     const pricingCollection = db.collection(pricingCollectionName);
 
     const numDocuments = await pricingCollection.countDocuments({});
 
     const listings = (await got(listingsUrl).json());
-    console.log(`Found ${listings.count} listings.`);
+    console.log(`Found ${listings.length} listings.`);
 
     let skip = 0;
     const limit = 1000;
@@ -64,6 +66,53 @@ const id = (i) => '00000'.slice(0, -`${i}`.length) + `${i}`;
       );
       skip += limit;
     }
+
+    await ensureUniqueNameIndex(db.collection('horseListings'));
+
+    await metaCollection.aggregate([
+      { 
+          "$lookup" : { 
+              "from" : "horseListingsJpegStore", 
+              "localField" : "name", 
+              "foreignField" : "name", 
+              "as" : "jpegListing"
+          }
+      }, 
+      { 
+          "$addFields" : { 
+              "listing" : { 
+                  "price" : { 
+                      "$divide" : [
+                          { 
+                              "$arrayElemAt" : [
+                                  "$jpegListing.listing.price_lovelace", 
+                                  0.0
+                              ]
+                          }, 
+                          1000000.0
+                      ]
+                  }, 
+                  "url" : { 
+                      "$concat" : [
+                          "https://www.jpg.store/asset/", 
+                          { 
+                              "$arrayElemAt" : [
+                                  "$jpegListing.listing.asset", 
+                                  0.0
+                              ]
+                          }
+                      ]
+                  }
+              }
+          }
+      }, 
+      { 
+          "$project" : { 
+              "jpegListing" : false
+          }
+      },
+      { $merge: { into: 'horseListings', on: 'name', whenMatched: 'replace' } }
+    ]).next();
   } catch (err) {
     console.log('ERROR:', err);
     process.exit(1);

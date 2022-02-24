@@ -27,7 +27,7 @@ const { db: { name: dbName, metaCollectionName } } = require(requirePath);
     const metaCollection = db.collection(metaCollectionName);
     const pricingCollection = db.collection(pricingCollectionName);
 
-    await ensureUniqueNameIndex(metaCollection);
+    await ensureUniqueNameIndex(pricingCollection);
 
     let sort = {name: 1};
     let skip = 0;
