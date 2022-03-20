@@ -55,14 +55,14 @@ const getAllListings = async (url) => {
 
     const listings = await getAllListings(listingsUrl);
     console.log(`Found ${listings.length} listings.`);
-    console.log(listings[0], listings[1], listings[2], listings[3]);
 
     let skip = 0;
     const limit = 1000;
     let ptr = 0;
     let currentListing = listings[ptr];
     let currentListingId = currentListing ? parseInt(currentListing.display_name.slice(-6, -1), 10) : null;
-    console.log(currentListing)
+
+    await ensureUniqueNameIndex(pricingCollection);
     while (skip < numDocuments) {
       await pricingCollection.bulkWrite(
         range(skip, Math.min(limit, numDocuments - skip)).map((i) => {
