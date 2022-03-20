@@ -1,6 +1,8 @@
 const { MongoClient } = require('mongodb');
 const got = require('got');
 const ensureUniqueNameIndex = require('./queries/ensureUniqueNameIndex');
+const wait = require('./util/wait');
+const _ = require('lodash');
 
 const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://localhost:27017';
 
@@ -27,6 +29,19 @@ const { db: { name: dbName, metaCollectionName } } = require(requirePath);
 const range = (start, length) => Array.apply(null, Array(length)).map((item, i) => i + start);
 const id = (i) => '00000'.slice(0, -`${i}`.length) + `${i}`;
 
+const getAllListings = async (url) => {
+  let page = 1;
+  const listings = [];
+  let currentPage = await got(`${url}?page=${page}`).json();
+  while (currentPage.length) {
+    listings.push(...currentPage);
+    page++;
+    await wait(100);
+    currentPage = await got(`${url}?page=${page}`).json();
+  }
+  return _.sortBy(listings, 'display_name');
+}
+
 (async () => {
   const mongoClient = new MongoClient(MONGODB_URL);
   try {
@@ -38,14 +53,16 @@ const id = (i) => '00000'.slice(0, -`${i}`.length) + `${i}`;
 
     const numDocuments = await pricingCollection.countDocuments({});
 
-    const listings = (await got(listingsUrl).json());
+    const listings = await getAllListings(listingsUrl);
     console.log(`Found ${listings.length} listings.`);
+    console.log(listings[0], listings[1], listings[2], listings[3]);
 
     let skip = 0;
     const limit = 1000;
     let ptr = 0;
     let currentListing = listings[ptr];
-    let currentListingId = currentListing ? parseInt(currentListing.asset_display_name.slice(-6, -1), 10) : null;
+    let currentListingId = currentListing ? parseInt(currentListing.display_name.slice(-6, -1), 10) : null;
+    console.log(currentListing)
     while (skip < numDocuments) {
       await pricingCollection.bulkWrite(
         range(skip, Math.min(limit, numDocuments - skip)).map((i) => {
@@ -54,7 +71,7 @@ const id = (i) => '00000'.slice(0, -`${i}`.length) + `${i}`;
             listing = currentListing;
             ptr++;
             currentListing = listings[ptr];
-            currentListingId = currentListing ? parseInt(currentListing.asset_display_name.slice(-6, -1), 10) : null;
+            currentListingId = currentListing ? parseInt(currentListing.display_name.slice(-6, -1), 10) : null;
           }
           return {
             updateOne: {
@@ -97,7 +114,7 @@ const id = (i) => '00000'.slice(0, -`${i}`.length) + `${i}`;
                           "https://www.jpg.store/asset/", 
                           { 
                               "$arrayElemAt" : [
-                                  "$jpegListing.listing.asset", 
+                                  "$jpegListing.listing.asset_id", 
                                   0.0
                               ]
                           }
