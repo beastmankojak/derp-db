@@ -46,7 +46,7 @@ const buildLoader = ({
       const db = mongoClient.db(dbName);
       const collection = db.collection(collectionName);
       const metaCollection = db.collection(metaCollectionName);
-      const offset = reload ? 0 : await collection.countDocuments({}) - 8;
+      const offset = reload ? 0 : await collection.countDocuments({});
 
       await ensureUniqueNameIndex(metaCollection);
 
