@@ -35,13 +35,19 @@ traits,
 
 
 const finalMeta = {
-...meta,
-metaTransform: metaTransform(traits),
-viewTransforms: [
-  defaultTraitTransform(meta),
-  defaultRarityTransform({ ...meta, originTraitMapper }),
-  defaultStatsTransform(meta),
-]
-}
+  ...meta,
+  metaTransform: metaTransform(traits),
+  viewTransforms: [
+    defaultTraitTransform(meta),
+    defaultRarityTransform({ ...meta, originTraitMapper }),
+    defaultStatsTransform(meta),
+  ],
+  s3: {
+    bucket: 'beastmankojak',
+    basePath: 'derp/baldo/ipfs',
+    extension: 'png',
+    sizes: [200],
+  }
+};
 
 module.exports = finalMeta;
